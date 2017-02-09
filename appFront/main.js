@@ -1,3 +1,11 @@
+
+//handle setupevents as quickly as possible
+const setupEvents = require('./installers/setupEvents')
+if (setupEvents.handleSquirrelEvent()) {
+   // squirrel event handled and app will exit in 1000ms, so don't do anything else
+   return;
+}
+
 const {app, BrowserWindow,Menu, electron} = require('electron')
 const path = require('path')
 const url = require('url')
@@ -68,7 +76,9 @@ app.on('activate', () => {
 })
 
 function tray(){
-    const tray = new Tray('assets/img/sokys.png');
+    const nativeImage = require('electron').nativeImage
+    let image = nativeImage.createFromPath(path.join(__dirname,'assets', 'img', 'sokys.png'))
+    const tray = new Tray(image);
     // Petit bonus : on affiche une bulle au survol.
 
     tray.on('click', () => {
@@ -86,7 +96,7 @@ function tray(){
             label: 'Quitter',
             click: () => {
                 // cette méthode permet d’ouvrir une URL dans le navigateur par défaut
-                 rapp.quit()
+                 app.quit()
             }
         }
     ])

@@ -11,7 +11,7 @@ getInstallerConfig()
 function getInstallerConfig () {
     console.log('creating windows installer')
     const rootPath = path.join('./')
-    const outPath = path.join(rootPath)
+    const outPath = path.join(rootPath,'release-builds')
 
     return Promise.resolve({
        appDirectory: path.join(outPath, 'Traffic\ Speed-win32-x64'),
