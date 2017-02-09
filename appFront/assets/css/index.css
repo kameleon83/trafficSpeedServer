@@ -1,0 +1,94 @@
+@font-face {
+    font-family: caveat;
+    src: url("../fonts/CaveatBrush-Regular.ttf");
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    font-family: caveat;
+    font-size: 12vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+html #container #connect, body #container #connect {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+html #container #connect input, body #container #connect input {
+    margin: 0;
+    padding: 0;
+    line-height: 20px;
+    font-family: caveat;
+    font-size: 14vh;
+    text-align: center;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+html #container #connect input#host, body #container #connect input#host {
+    width: 50%;
+    margin: 2px;
+}
+
+html #container #connect input#port, body #container #connect input#port {
+    width: 20%;
+    margin: 2px;
+}
+
+html #container #connect button, body #container #connect button {
+    margin: 0;
+    padding: 0;
+}
+
+html #container #connect button img, body #container #connect button img {
+    width: 15vh;
+    height: auto;
+}
+
+html #container table, body #container table {
+    text-align: center;
+    width: 100%;
+    height: 0 auto;
+    margin: 0 auto;
+    padding: 0;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+html #container table thead, body #container table thead {
+    border-bottom: 2px solid white;
+}
+
+html #container table thead th, body #container table thead th {
+    font-weight: bold;
+}
+
+html #container table thead th:nth-child(n+2), body #container table thead th:nth-child(n+2) {
+    border-left: 1px solid white;
+}
+
+html #container table tbody tr, body #container table tbody tr {
+    height: 20vh;
+}
+
+html #container table tbody tr:nth-child(n+2), body #container table tbody tr:nth-child(n+2) {
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+html #container table tbody tr td, body #container table tbody tr td {
+    font-style: italic;
+}
+
+html #container table tbody tr td:nth-child(n+2), body #container table tbody tr td:nth-child(n+2) {
+    border-left: 1px solid white;
+}

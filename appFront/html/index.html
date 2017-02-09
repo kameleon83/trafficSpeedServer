@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../assets/css/index.css">
+</head>
+<body>
+    <div id="container">
+        <div id="connect">
+            <input type="text" placeholder="Host" id="host" disabled >
+            <input type="text" placeholder="Port" id="port" disabled >
+            <button type="button" name="button" id="okOrNot" onclick="register()"></button>
+        </div>
+
+        <table>
+            <thead>
+                <th>Nom</th>
+                <th>Dl</th>
+                <th>U</th>
+                <th>Up</th>
+                <th>U</th>
+            </thead>
+            <tbody id="tbody">
+
+            </tbody>
+        </table>
+
+    </div>
+    <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+    <!-- normal script imports etc  -->
+    <script src="../assets/js/jquery-min.js"></script>
+
+    <!-- Insert this line after script imports -->
+    <script>if (window.module) module = window.module;</script>
+    <script src="../assets/js/index.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</body>
+</html>

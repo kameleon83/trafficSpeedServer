@@ -1,0 +1,11 @@
+{
+  "name": "trafficSpeed",
+  "productName": "Traffic Speed",
+  "description": "Application du traffic de débit sur une machine distante",
+  "version": "0.1.0",
+  "main": "main.js",
+  "devDependencies": {
+    "electron": "^1.4.15",
+    "electron-winstaller": "^2.5.2"
+  }
+}

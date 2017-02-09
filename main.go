@@ -63,11 +63,11 @@ func ifConfig() ([]string, error) {
 	return strings.Split(str, "\n"), err
 }
 
-// logWriteFile va écrire les log dans un fichier trafficSpeed.log
+// logWriteFile va écrire les log dans un fichier trafficSp.log
 func logWriteFile(er error) {
-	f, err := os.OpenFile("trafficSpeed.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	f, err := os.OpenFile("logfile.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
-		fc, e := os.Create("trafficSpeed.log")
+		fc, e := os.Create("logfile.log")
 		defer fc.Close()
 		if e != nil {
 			log.Fatalf("error create file: %v", e)
@@ -184,11 +184,11 @@ func mesure(f float64) (float64, string) {
 	moctet := math.Exp2(20)
 	goctet := math.Exp2(30)
 	if f > goctet {
-		return float64WithPrecision(f, 3) / goctet, "Go/s"
+		return float64WithPrecision(f/goctet, 3), "Go/s"
 	} else if f > moctet {
-		return float64WithPrecision(f, 3) / moctet, "Mo/s"
+		return float64WithPrecision(f/moctet, 3), "Mo/s"
 	} else if f > koctet {
-		return float64WithPrecision(f, 3) / koctet, "Ko/s"
+		return float64WithPrecision(f/koctet, 3), "Ko/s"
 	}
 	return float64WithPrecision(f, 0), "o/s"
 }
