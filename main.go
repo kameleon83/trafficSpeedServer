@@ -1,7 +1,13 @@
+// Copyright 2017 Samuel Michaux. All rights reserved.
+// license that can be found in the LICENSE file.
+
+// Package main
 package main
 
 import (
 	"encoding/json"
+	"errors"
+	"flag"
 	"io/ioutil"
 	"log"
 	"math"
@@ -13,42 +19,40 @@ import (
 	"time"
 )
 
+// Trafic est une structure regroupant les éléments nécessaires pour récupérer le trafic réseau
 type Trafic struct {
 	Name    string
+	RxFinal float64
 	Rx      float64
 	RxName  string
-	RxFinal float64
+	TxFinal float64
 	Tx      float64
 	TxName  string
-	TxFinal float64
-}
-
-type Trafics struct {
-	Trafics []*Trafic
 }
 
 var tt []*Trafic
 
 func main() {
 
-	args := os.Args
-	port := ":1111"
+	var port int
+	flag.IntVar(&port, "port", 1111, "Choix du port")
+	var timer int
+	flag.IntVar(&timer, "timer", 1, "Choix du port")
 
-	if args[1] == "" {
-		port = ":" + args[1]
-	}
+	flag.Parse()
 
 	trafic := &Trafic{}
-	trafic.trafic()
+	trafic.trafic(time.Duration(int(timer)))
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(tt)
 
 	})
-
-	log.Fatal(http.ListenAndServe(port, nil))
+	logWriteFile(errors.New("Démarrage de l'application Ok - port : " + strconv.Itoa(port)))
+	logWriteFile(http.ListenAndServe(":"+strconv.Itoa(port), nil))
 }
 
+// ifConfig va récupérer les nom de chaque carte réseaux
 func ifConfig() ([]string, error) {
 	c := exec.Command("/bin/sh", "-c", "ifconfig -s | sed \"1d\" | cut -d' ' -f1")
 	b, err := c.CombinedOutput()
@@ -59,13 +63,14 @@ func ifConfig() ([]string, error) {
 	return strings.Split(str, "\n"), err
 }
 
-func logWriteFile(err error) {
-	f, err := os.OpenFile("error.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+// logWriteFile va écrire les log dans un fichier trafficSpeed.log
+func logWriteFile(er error) {
+	f, err := os.OpenFile("trafficSpeed.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
-		fc, e := os.Create("error.log")
+		fc, e := os.Create("trafficSpeed.log")
 		defer fc.Close()
 		if e != nil {
-			log.Println(e)
+			log.Fatalf("error create file: %v", e)
 			os.Exit(1)
 		}
 		logWriteFile(err)
@@ -74,16 +79,18 @@ func logWriteFile(err error) {
 	defer f.Close()
 
 	log.SetOutput(f)
-	log.Println(err)
+	log.Println(er)
 }
 
-func (t *Trafic) trafic() {
+// Trafic va calculer le béit de chaque carte réseaux
+func (t *Trafic) trafic(dur time.Duration) {
 	go func() {
 
 		ts := []*Trafic{}
 		ip, err := ifConfig()
 		var count int
 		for {
+			log.Println("time")
 			if err != nil {
 				count++
 				logWriteFile(err)
@@ -123,11 +130,12 @@ func (t *Trafic) trafic() {
 				ts = append(ts, t)
 			}
 			tt = ts
-			time.Sleep(time.Second)
+			time.Sleep(time.Second * dur)
 		}
 	}()
 }
 
+// ReadStat va chercher dans le système les statistics en byte du réseau demandé
 func (t *Trafic) readStat(crtReseau string) *Trafic {
 	for {
 		argTx := "/sys/class/net/" + crtReseau + "/statistics/tx_bytes"
@@ -150,14 +158,17 @@ func (t *Trafic) readStat(crtReseau string) *Trafic {
 	}
 }
 
+// CalcDiff va calculer la différence entre les statistics avant et après suivant un timer donné dans le main
 func calcDiff(a, b float64) float64 {
 	return b - a
 }
 
+// ByteToString va transformer des bytes en chaînes de caractères
 func byteToString(b []byte) string {
 	return strings.TrimSpace(string(b))
 }
 
+// ByteToFloat va transformer des bytes en décimal
 func byteToFloat(b []byte) float64 {
 	f, err := strconv.ParseFloat(byteToString(b), 32)
 	if err != nil {
@@ -166,6 +177,7 @@ func byteToFloat(b []byte) float64 {
 	return f
 }
 
+// Mesure permet de transformer les bits en octets
 func mesure(f float64) (float64, string) {
 	// f := float64(i)
 	koctet := math.Exp2(10)
@@ -181,6 +193,7 @@ func mesure(f float64) (float64, string) {
 	return float64WithPrecision(f, 0), "o/s"
 }
 
+// float64WithPrecision va permettre de choisir le nombre de chiffres après la virgule
 func float64WithPrecision(f float64, n int) float64 {
 	var round float64
 	pow := math.Pow(10, float64(n))
