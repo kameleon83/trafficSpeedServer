@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"log"
 	"math"
@@ -32,17 +31,22 @@ var tt []*Trafic
 
 func main() {
 
-	e := errors.New("test de log")
-	logWriteFile(e)
+	args := os.Args
+	port := ":1111"
+
+	if args[1] == "" {
+		port = ":" + args[1]
+	}
 
 	trafic := &Trafic{}
 	trafic.trafic()
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(tt)
 
 	})
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(port, nil))
 }
 
 func ifConfig() ([]string, error) {
