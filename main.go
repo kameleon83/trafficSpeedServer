@@ -103,31 +103,33 @@ func (t *Trafic) trafic(dur time.Duration) {
 			for _, v := range ip {
 				t := &Trafic{}
 				readStatOk := false
-				for _, val := range ts2 {
+				if v != "lo" {
+					for _, val := range ts2 {
 
-					if val.Name == v {
-						t.readStat(v)
+						if val.Name == v {
+							t.readStat(v)
 
-						t.Name = v
+							t.Name = v
 
-						cRx := calcDiff(val.Rx, t.Rx)
-						f, s := mesure(cRx)
-						t.RxFinal = f
-						t.RxName = s
+							cRx := calcDiff(val.Rx, t.Rx)
+							f, s := mesure(cRx)
+							t.RxFinal = f
+							t.RxName = s
 
-						cTx := calcDiff(val.Tx, t.Tx)
-						f, s = mesure(cTx)
-						t.TxFinal = f
-						t.TxName = s
+							cTx := calcDiff(val.Tx, t.Tx)
+							f, s = mesure(cTx)
+							t.TxFinal = f
+							t.TxName = s
 
-						readStatOk = true
+							readStatOk = true
+						}
+
 					}
-
+					if !readStatOk {
+						t.readStat(v)
+					}
+					ts = append(ts, t)
 				}
-				if !readStatOk {
-					t.readStat(v)
-				}
-				ts = append(ts, t)
 			}
 			tt = ts
 			time.Sleep(time.Second * dur)

@@ -12,14 +12,24 @@ const path = require('path')
 const url = require('url')
 const Tray = electron.Tray
 const AutoLaunch = require('auto-launch');
+const os = require('os');
 
 let win
 let tray
 
+
+let platform = os.platform
+
 function createWindow () {
-    const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
-    const mW = width - 430;
-    const mH = height - 230;
+
+    var mW = 0;
+    var mH = 0;
+
+    if (platform === 'win32'){
+        const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
+        mW = width - 430;
+        mH = height - 230;
+    }
     // Create the browser window.
     win = new BrowserWindow({
         width: 400,
