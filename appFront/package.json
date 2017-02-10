@@ -1,19 +1,24 @@
 {
-    "name": "trafficSpeed",
-    "productName": "Traffic Speed",
-    "description": "Application du traffic de débit sur une machine distante",
-    "version": "0.1.2",
-    "main": "main.js",
-    "devDependencies": {
-        "electron": "^1.4.15",
-        "electron-squirrel-startup": "^1.0.0",
-        "electron-winstaller": "^2.5.2"
-    },
-    "scripts": {
-        "package-mac": "electron-packager . --overwrite --asar=true --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
-        "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=x64 --icon=assets/img/sokys.ico --prune=true --out=release-builds --version-string.CompanyName=SOKYS --version-string.FileDescription=SOKYS --version-string.ProductName=\"TrafficSpeed\"",
-        "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds",
-        "create-installer-mac": "electron-installer-dmg ./release-builds/Electron\\ tutorial\\ app-darwin-x64/Electron\\ tutorial\\ app.app electron-tutorial-app --out=release-builds --overwrite --icon=assets/icons/mac/icon.icns",
-        "create-installer-win": "node installers/windows/createinstaller.js"
-    }
+  "name": "trafficSpeed",
+  "productName": "Traffic Speed",
+  "description": "Application du traffic de débit sur une machine distante",
+  "version": "0.1.2",
+  "main": "main.js",
+  "devDependencies": {
+    "auto-launch": "^5.0.1",
+    "electron": "^1.4.15",
+    "electron-screen": "^1.0.3",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-winstaller": "^2.5.2"
+  },
+  "scripts": {
+    "package-mac": "electron-packager . --overwrite --asar=true --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=x64 --icon=assets/img/sokys.ico --prune=true --out=release-builds --version-string.CompanyName=SOKYS --version-string.FileDescription=SOKYS --version-string.ProductName=\"TrafficSpeed\"",
+    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds",
+    "create-installer-mac": "electron-installer-dmg ./release-builds/Electron\\ tutorial\\ app-darwin-x64/Electron\\ tutorial\\ app.app electron-tutorial-app --out=release-builds --overwrite --icon=assets/icons/mac/icon.icns",
+    "create-installer-win": "node installers/windows/createinstaller.js"
+  },
+  "dependencies": {
+    "auto-launch": "^5.0.1"
+  }
 }

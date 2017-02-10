@@ -4,6 +4,8 @@
 }
 
 html, body {
+    -ms-overflow-style: scrollbar;
+    -webkit-app-region: drag;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -13,6 +15,20 @@ html, body {
     font-size: 12vh;
     background-color: rgba(0, 0, 0, 0.3);
     color: white;
+}
+
+html input[type="submit"],
+html input[type="reset"],
+html input[type="button"],
+html input[type="text"],
+html button,
+html textarea, body input[type="submit"],
+body input[type="reset"],
+body input[type="button"],
+body input[type="text"],
+body button,
+body textarea {
+    -webkit-app-region: no-drag;
 }
 
 html #container #connect, body #container #connect {
