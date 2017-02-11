@@ -10,10 +10,14 @@ const path = require('path')
 const url = require('url')
 const Tray = electron.Tray
 const AutoLaunch = require('auto-launch');
+const os = require('os');
 
 let win
 let tray
 var mainWindow = null
+
+
+let platform = os.platform
 
 function createWindow () {
     const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
