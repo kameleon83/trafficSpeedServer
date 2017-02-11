@@ -3,6 +3,21 @@
     src: url("../fonts/CaveatBrush-Regular.ttf");
 }
 
+@font-face {
+    font-family: exo;
+    src: url("../fonts/Exo2-Regular.ttf");
+}
+
+@font-face {
+    font-family: raleway;
+    src: url("../fonts/Raleway-Regular.ttf");
+}
+
+* {
+    font-family: raleway;
+    font-size: 4vw;
+}
+
 html, body {
     -ms-overflow-style: scrollbar;
     -webkit-app-region: drag;
@@ -11,8 +26,6 @@ html, body {
     box-sizing: border-box;
     height: 100%;
     width: 100%;
-    font-family: caveat;
-    font-size: 12vh;
     background-color: rgba(0, 0, 0, 0.3);
     color: white;
 }
@@ -37,18 +50,18 @@ html #container #connect, body #container #connect {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-bottom: 2px;
 }
 
 html #container #connect input, body #container #connect input {
     margin: 0;
     padding: 0;
     line-height: 20px;
-    font-family: caveat;
-    font-size: 14vh;
     text-align: center;
     border: none;
     background-color: rgba(255, 255, 255, 0.3);
     color: white;
+    cursor: pointer;
 }
 
 html #container #connect input#host, body #container #connect input#host {
@@ -64,10 +77,16 @@ html #container #connect input#port, body #container #connect input#port {
 html #container #connect button, body #container #connect button {
     margin: 0;
     padding: 0;
+    background: none;
+    border: none;
+    padding: 5px;
+    margin-top: 5px;
+    cursor: pointer;
 }
 
 html #container #connect button img, body #container #connect button img {
-    width: 15vh;
+    background-color: none;
+    width: 4vw;
     height: auto;
 }
 

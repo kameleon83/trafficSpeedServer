@@ -1,10 +1,8 @@
 
 //handle setupevents as quickly as possible
+if (require('electron-squirrel-startup')) return;
 const setupEvents = require('./installers/setupEvents')
-if (setupEvents.handleSquirrelEvent()) {
-    // squirrel event handled and app will exit in 1000ms, so don't do anything else
-    return;
-}
+
 
 const electron = require('electron')
 const {app, BrowserWindow,Menu} = electron
@@ -15,21 +13,34 @@ const AutoLaunch = require('auto-launch');
 
 let win
 let tray
+var mainWindow = null
 
 function createWindow () {
     const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
-    const mW = width - 430;
-    const mH = height - 230;
+    var mW = width - 430;
+    var mH = height - 150;
+
+    var isDev = process.env.TODO_DEV ? process.env.TODO_DEV.trim() == "true" : false;
+
+    var w, h, c;
+    if (isDev){
+        w = 800
+        h = 800
+        c = true
+        mW = (width / 2) - (w/2)
+        mH = (height / 2) - (h/2)
+    }else{
+        w = 400
+        h = 100
+        c = false
+    }
     // Create the browser window.
     win = new BrowserWindow({
-        width: 400,
-        maxWidth: 500,
-        minWidth: 350,
-        height: 150,
-        maxHeight: 250,
-        minHeight: 150,
+        width: w,
+        height: h,
         x: mW,
         y: mH,
+        center: c,
         icon: 'assets/img/sokys.png',
         title: 'Traffic Speed',
         maximized: false,
@@ -38,9 +49,12 @@ function createWindow () {
         frame: false
     });
 
+    if (isDev){
+        // Open the DevTools.
+        win.webContents.openDevTools()
+    }
+
     // and load the index.html of the app.
-
-
     win.loadURL(url.format({
         pathname: path.join(__dirname,'html', 'index.html'),
         protocol: 'file:',
@@ -49,8 +63,7 @@ function createWindow () {
 
     trayOn()
 
-    // Open the DevTools.
-    // win.webContents.openDevTools()
+
 
     // Emitted when the window is closed.
     win.on('closed', () => {

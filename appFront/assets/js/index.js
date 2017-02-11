@@ -33,9 +33,13 @@ function register() {
     if (!localStorageGet("host") || !localStorageGet("port")){
         var h = host.value;
         var p = port.value;
-        localStorage.setItem('host', h)
-        localStorage.setItem('port', p)
-        Connection()
+        if ( h != "" && p != ""){
+            localStorage.setItem('host', h)
+            localStorage.setItem('port', p)
+            Connection()
+        }else{
+            notif("Informations Manquantes","Désolé mais tu as oublié d'enregistrer les informations. Si tu veux valider alors rentres l'IP (adresse web) et le port.")
+        }
         // location.reload()
     }else{
         localStorage.clear()
@@ -116,7 +120,7 @@ function checkElement(id, elt, parent){
 function notif(title, body){
     new Notification(title,{
         body: body,
-        icon: 'assets/img/sokys.png'
+        icon: '../assets/img/sokys.png'
     });
 }
 
