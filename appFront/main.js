@@ -1,38 +1,52 @@
-
-//handle setupevents as quickly as possible
-if (require('electron-squirrel-startup')) return;
+if (process.platform === 'windows') {
+    // console.log(process.platform);
+    if (require('electron-squirrel-startup')) return;
+}else{
+    // console.log(process.platform);
+}
 const setupEvents = require('./installers/setupEvents')
 
 
 const electron = require('electron')
+const AutoLaunch = require('auto-launch');
 const {app, BrowserWindow,Menu} = electron
 const path = require('path')
 const url = require('url')
 const Tray = electron.Tray
-const AutoLaunch = require('auto-launch');
 const os = require('os');
 
 let win
 let tray
 var mainWindow = null
+var transparent = false;
 
-
-let platform = os.platform
 
 function createWindow () {
-    const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
-    var mW = width - 430;
-    var mH = height - 150;
+
+    if (process.platform === 'windows') {
+        const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
+        var mW = width - 430;
+        var mH = height - 150;
+        transparent = true;
+    }
 
     var isDev = process.env.TODO_DEV ? process.env.TODO_DEV.trim() == "true" : false;
 
     var w, h, c;
-    if (isDev){
+    if (isDev && process.platform === 'windows'){
         w = 800
         h = 800
         c = true
         mW = (width / 2) - (w/2)
         mH = (height / 2) - (h/2)
+    }else if (process.platform !== 'windows'  && !isDev){
+        w = 400
+        h = 100
+        c = true
+    }else if (process.platform !== 'windows'  && isDev){
+        w = 800
+        h = 800
+        c = true
     }else{
         w = 400
         h = 100
@@ -48,7 +62,7 @@ function createWindow () {
         icon: 'assets/img/sokys.png',
         title: 'Traffic Speed',
         maximized: false,
-        transparent: true,
+        transparent: transparent,
         alwaysOnTop: true,
         frame: false
     });
@@ -107,18 +121,24 @@ function trayOn(){
     tray = new Tray(image);
     // Petit bonus : on affiche une bulle au survol.
 
+    var ext = ""
+    if (process.platform === 'windows') {
+        ext = ".exe"
+    }
+
+    // console.log("extension : " + ext);
+
     var trafficSpeedAutoLauncher = new AutoLaunch({
         name: 'Traffic\ Speed',
-        path: path.join(__dirname,'Traffic\ Speed.exe'),
+        path: path.join(__dirname,'Traffic_Speed' + ext),
     });
-    // var updateAutoLauncher = new AutoLaunch({
-    //     name: 'Traffic\ Speed\ Updater',
-    //     path: path.join(__dirname,'Update.exe'),
-    // });
+
 
     tray.on('click', () => {
         win.isVisible() ? win.hide() : win.show()
     })
+
+    win.setAlwaysOnTop(true)
 
     const contextMenu = Menu.buildFromTemplate([
         {
@@ -135,10 +155,8 @@ function trayOn(){
             type: 'checkbox',
             click: (e) => {
                 if (e.checked){
-                    // updateAutoLauncher.enable();
                     trafficSpeedAutoLauncher.enable();
                 }else{
-                    // updateAutoLauncher.disable();
                     trafficSpeedAutoLauncher.disable();
                 }
             }
@@ -167,19 +185,21 @@ function trayOn(){
         }
     ])
 
-    trafficSpeedAutoLauncher.isEnabled()
-    .then(function(isEnabled){
-        if(isEnabled){
-            contextMenu.items[2].checked = true
-            return isEnabled;
-        }
-        return isEnabled
-    })
-
     if (win.isAlwaysOnTop()){
         contextMenu.items[4].checked = true
     }
 
-    tray.setToolTip('Traffic Speed');
-    tray.setContextMenu(contextMenu)
+    let autoLaunchFunction = () => {
+        trafficSpeedAutoLauncher.isEnabled()
+        .then(function(isEnabled){
+            // console.log(isEnabled);
+            if(isEnabled){
+                contextMenu.items[2].checked = true
+            }
+            tray.setToolTip('Traffic Speed');
+            tray.setContextMenu(contextMenu)
+        })
+    }
+
+    autoLaunchFunction()
 }
