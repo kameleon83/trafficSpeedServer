@@ -1,7 +1,7 @@
-if (process.platform === 'windows') {
+if (process.platform === 'win32') {
     // console.log(process.platform);
     if (require('electron-squirrel-startup')) return;
-}else{
+} else {
     // console.log(process.platform);
 }
 const setupEvents = require('./installers/setupEvents')
@@ -9,48 +9,42 @@ const setupEvents = require('./installers/setupEvents')
 
 const electron = require('electron')
 const AutoLaunch = require('auto-launch');
-const {app, BrowserWindow,Menu} = electron
+const { app, BrowserWindow, Menu } = electron
 const path = require('path')
 const url = require('url')
 const Tray = electron.Tray
-const os = require('os');
 
 let win
 let tray
 var mainWindow = null
-var transparent = false;
 
 
-function createWindow () {
-
-    if (process.platform === 'windows') {
-        const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
-        var mW = width - 430;
-        var mH = height - 150;
-        transparent = true;
-    }
+function createWindow() {
 
     var isDev = process.env.TODO_DEV ? process.env.TODO_DEV.trim() == "true" : false;
-
+    console.log(width, height);
     var w, h, c;
-    if (isDev && process.platform === 'windows'){
+    if (isDev && process.platform === 'win32') {
+        var { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
         w = 800
         h = 800
         c = true
-        mW = (width / 2) - (w/2)
-        mH = (height / 2) - (h/2)
-    }else if (process.platform !== 'windows'  && !isDev){
+        mW = (width / 2) - (w / 2)
+        mH = (height / 2) - (h / 2)
+    } else if (process.platform === 'win32' && !isDev) {
         w = 400
         h = 100
-        c = true
-    }else if (process.platform !== 'windows'  && isDev){
+        var { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
+        var mW = width - 430;
+        var mH = height - 150;
+    } else if (process.platform !== 'win32' && isDev) {
         w = 800
         h = 800
         c = true
-    }else{
+    } else {
         w = 400
         h = 100
-        c = false
+        c = true
     }
     // Create the browser window.
     win = new BrowserWindow({
@@ -62,19 +56,18 @@ function createWindow () {
         icon: 'assets/img/sokys.png',
         title: 'Traffic Speed',
         maximized: false,
-        transparent: transparent,
         alwaysOnTop: true,
         frame: false
     });
 
-    if (isDev){
+    if (isDev) {
         // Open the DevTools.
         win.webContents.openDevTools()
     }
 
     // and load the index.html of the app.
     win.loadURL(url.format({
-        pathname: path.join(__dirname,'html', 'index.html'),
+        pathname: path.join(__dirname, 'html', 'index.html'),
         protocol: 'file:',
         slashes: true
     }))
@@ -115,9 +108,9 @@ app.on('activate', () => {
     }
 })
 
-function trayOn(){
+function trayOn() {
     const nativeImage = electron.nativeImage
-    let image = nativeImage.createFromPath(path.join(__dirname,'assets', 'img', 'sokys.png'))
+    let image = nativeImage.createFromPath(path.join(__dirname, 'assets', 'img', 'sokys.png'))
     tray = new Tray(image);
     // Petit bonus : on affiche une bulle au survol.
 
@@ -130,7 +123,7 @@ function trayOn(){
 
     var trafficSpeedAutoLauncher = new AutoLaunch({
         name: 'Traffic\ Speed',
-        path: path.join(__dirname,'Traffic_Speed' + ext),
+        path: path.join(__dirname, 'Traffic_Speed' + ext),
     });
 
 
@@ -140,8 +133,7 @@ function trayOn(){
 
     win.setAlwaysOnTop(true)
 
-    const contextMenu = Menu.buildFromTemplate([
-        {
+    const contextMenu = Menu.buildFromTemplate([{
             label: 'Ouvrir owncloud',
             click: () => {
                 // cette méthode permet d’ouvrir une URL dans le navigateur par défaut
@@ -154,9 +146,9 @@ function trayOn(){
             label: 'Au démarrage',
             type: 'checkbox',
             click: (e) => {
-                if (e.checked){
+                if (e.checked) {
                     trafficSpeedAutoLauncher.enable();
-                }else{
+                } else {
                     trafficSpeedAutoLauncher.disable();
                 }
             }
@@ -167,9 +159,9 @@ function trayOn(){
             label: 'Toujours devant',
             type: 'checkbox',
             click: (e) => {
-                if (e.checked){
+                if (e.checked) {
                     win.setAlwaysOnTop(true)
-                }else{
+                } else {
                     win.setAlwaysOnTop(false)
                 }
             }
@@ -185,20 +177,20 @@ function trayOn(){
         }
     ])
 
-    if (win.isAlwaysOnTop()){
+    if (win.isAlwaysOnTop()) {
         contextMenu.items[4].checked = true
     }
 
     let autoLaunchFunction = () => {
         trafficSpeedAutoLauncher.isEnabled()
-        .then(function(isEnabled){
-            // console.log(isEnabled);
-            if(isEnabled){
-                contextMenu.items[2].checked = true
-            }
-            tray.setToolTip('Traffic Speed');
-            tray.setContextMenu(contextMenu)
-        })
+            .then(function(isEnabled) {
+                // console.log(isEnabled);
+                if (isEnabled) {
+                    contextMenu.items[2].checked = true
+                }
+                tray.setToolTip('Traffic Speed');
+                tray.setContextMenu(contextMenu)
+            })
     }
 
     autoLaunchFunction()

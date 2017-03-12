@@ -47,9 +47,10 @@ function register() {
     }
 }
 
+let tr, span_name, span_rx, span_rx_name, span_tx, span_tx_name, jsonObj, http_request;
 
 function loadJSON(url) {
-    var http_request = new XMLHttpRequest();
+    http_request = new XMLHttpRequest();
     try {
         // Opera 8.0+, Firefox, Chrome, Safari
         http_request = new XMLHttpRequest();
@@ -75,23 +76,15 @@ function loadJSON(url) {
         if (http_request.readyState === 4) {
 
             // Javascript function JSON.parse to parse JSON data
-            var jsonObj = JSON.parse(http_request.responseText);
+            jsonObj = JSON.parse(http_request.responseText);
 
             for (var i = 0; i < jsonObj.length; i++) {
-                let tr = checkElement('tr_' + i, 'tr', 'tbody')
-                let span_name = checkElement('name_' + i, "td", "tr_" + i)
-                let span_rx = checkElement('rx_' + i, "td", "tr_" + i)
-                let span_rx_name = checkElement('rx_name_' + i, "td", "tr_" + i)
-                let span_tx = checkElement('tx_' + i, "td", "tr_" + i)
-                let span_tx_name = checkElement('tx_name_' + i, "td", "tr_" + i)
-
-            }
-            for (var i = 0; i < jsonObj.length; i++) {
-                let span_name = document.getElementById('name_' + i)
-                let span_rx = document.getElementById('rx_' + i)
-                let span_rx_name = document.getElementById('rx_name_' + i)
-                let span_tx = document.getElementById('tx_' + i)
-                let span_tx_name = document.getElementById('tx_name_' + i)
+                tr = checkElement('tr_' + i, 'tr', 'tbody')
+                span_name = checkElement('name_' + i, "td", "tr_" + i)
+                span_rx = checkElement('rx_' + i, "td", "tr_" + i)
+                span_rx_name = checkElement('rx_name_' + i, "td", "tr_" + i)
+                span_tx = checkElement('tx_' + i, "td", "tr_" + i)
+                span_tx_name = checkElement('tx_name_' + i, "td", "tr_" + i)
 
                 span_name.innerHTML = jsonObj[i].Name
                 span_rx.innerHTML = jsonObj[i].RxFinal
@@ -106,10 +99,12 @@ function loadJSON(url) {
     http_request.send();
 }
 
+let tmp, d;
+
 function checkElement(id, elt, parent) {
-    let tmp = document.getElementById(id)
+    tmp = document.getElementById(id)
     if (tmp == null) {
-        var d = document.createElement(elt)
+        d = document.createElement(elt)
         d.id = id
         document.getElementById(parent).appendChild(d)
         return d
@@ -126,11 +121,12 @@ function notif(title, body) {
 
 
 let reconnection = false
+var url, xhr;
 
 function Connection() {
-    let url = "http://" + localStorage.getItem("host") + ":" + localStorage.getItem("port")
+    url = "http://" + localStorage.getItem("host") + ":" + localStorage.getItem("port")
 
-    var xhr = new XMLHttpRequest();
+    xhr = new XMLHttpRequest();
 
     xhr.open('HEAD', url, true);
     xhr.send();

@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: caveat;
     src: url('../fonts/CaveatBrush-Regular.ttf');
@@ -14,20 +13,21 @@
     src: url('../fonts/Raleway-Regular.ttf');
 }
 
-*{
+* {
     font-family: raleway;
     font-size: 4vw;
 }
 
-html, body{
+html,
+body {
     -ms-overflow-style: scrollbar;
-    -webkit-app-region:drag;
+    -webkit-app-region: drag;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     height: 100%;
     width: 100%;
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0, 0, 0, 1);
     color: white;
     input[type="submit"],
     input[type="reset"],
@@ -37,33 +37,33 @@ html, body{
     textarea {
         -webkit-app-region: no-drag;
     }
-    #container{
-        #connect{
+    #container {
+        #connect {
             display: flex;
             flex-wrap: wrap;
             flex-direction: row;
             align-items: center;
             justify-content: center;
             margin-bottom: 2px;
-            input{
+            input {
                 margin: 0;
                 padding: 0;
                 line-height: 20px;
                 text-align: center;
                 border: none;
-                background-color: rgba(255,255,255,0.3);
+                background-color: rgba(255, 255, 255, 0.3);
                 color: white;
                 cursor: pointer;
-                &#host{
+                &#host {
                     width: 50%;
                     margin: 2px;
                 }
-                &#port{
+                &#port {
                     width: 20%;
                     margin: 2px;
                 }
             }
-            button{
+            button {
                 margin: 0;
                 padding: 0;
                 background: none;
@@ -71,14 +71,14 @@ html, body{
                 padding: 5px;
                 margin-top: 5px;
                 cursor: pointer;
-                img{
+                img {
                     background-color: none;
                     width: 4vw;
                     height: auto;
                 }
             }
         }
-        table{
+        table {
             text-align: center;
             width: 100%;
             height: 0 auto;
@@ -86,31 +86,28 @@ html, body{
             padding: 0;
             table-layout: fixed;
             border-collapse: collapse;
-            thead{
+            thead {
                 border-bottom: 2px solid white;
-                th{
+                th {
                     font-weight: bold;
                     // font-size: 1.2em;
-                    &:nth-child(n+2){
+                    &:nth-child(n+2) {
                         border-left: 1px solid white;
                     }
                 }
             }
-            tbody{
-                tr{
+            tbody {
+                tr {
                     height: 20vh;
-                    &:nth-child(n+2){
-                        border-top: 1px solid rgba(255,255,255,0.5);
+                    &:nth-child(n+2) {
+                        border-top: 1px solid rgba(255, 255, 255, 0.5);
                     }
-
-                    td{
+                    td {
                         font-style: italic;
-
-                        &:nth-child(n+2){
+                        &:nth-child(n+2) {
                             border-left: 1px solid white;
                         }
                     }
-
                 }
             }
         }
