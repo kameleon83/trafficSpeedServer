@@ -1,7 +1,7 @@
 // (function(){
 
-function localStorageGet(item){
-    if (localStorage.getItem(item) != null){
+function localStorageGet(item) {
+    if (localStorage.getItem(item) != null) {
         return true
     }
     return false
@@ -11,13 +11,13 @@ let host = document.getElementById('host')
 let port = document.getElementById('port')
 let button = document.getElementById('okOrNot')
 
-if (!localStorageGet("host") || !localStorageGet("port")){
+if (!localStorageGet("host") || !localStorageGet("port")) {
     host.disabled = false
     port.disabled = false
     let img = document.createElement('img')
     img.src = "../assets/img/validation.png"
     button.appendChild(img)
-}else{
+} else {
     host.value = "http://" + localStorage.getItem("host")
     port.value = localStorage.getItem("port")
     host.disabled = true
@@ -30,39 +30,39 @@ if (!localStorageGet("host") || !localStorageGet("port")){
 
 
 function register() {
-    if (!localStorageGet("host") || !localStorageGet("port")){
+    if (!localStorageGet("host") || !localStorageGet("port")) {
         var h = host.value;
         var p = port.value;
-        if ( h != "" && p != ""){
+        if (h != "" && p != "") {
             localStorage.setItem('host', h)
             localStorage.setItem('port', p)
             Connection()
-        }else{
-            notif("Informations Manquantes","Désolé mais tu as oublié d'enregistrer les informations. Si tu veux valider alors rentres l'IP (adresse web) et le port.")
+        } else {
+            notif("Informations Manquantes", "Désolé mais tu as oublié d'enregistrer les informations. Si tu veux valider alors rentres l'IP (adresse web) et le port.")
         }
         // location.reload()
-    }else{
+    } else {
         localStorage.clear()
         location.reload()
     }
 }
 
 
-function loadJSON(url){
+function loadJSON(url) {
     var http_request = new XMLHttpRequest();
-    try{
+    try {
         // Opera 8.0+, Firefox, Chrome, Safari
         http_request = new XMLHttpRequest();
-    }catch (e){
+    } catch (e) {
         // Internet Explorer Browsers
-        try{
+        try {
             http_request = new ActiveXObject("Msxml2.XMLHTTP");
 
-        }catch (e) {
+        } catch (e) {
 
-            try{
+            try {
                 http_request = new ActiveXObject("Microsoft.XMLHTTP");
-            }catch (e){
+            } catch (e) {
                 // Something went wrong
                 alert("Your browser broke!");
                 return false;
@@ -71,19 +71,19 @@ function loadJSON(url){
         }
     }
 
-    http_request.onreadystatechange = function(){
-        if (http_request.readyState === 4 ){
+    http_request.onreadystatechange = function() {
+        if (http_request.readyState === 4) {
 
             // Javascript function JSON.parse to parse JSON data
             var jsonObj = JSON.parse(http_request.responseText);
 
             for (var i = 0; i < jsonObj.length; i++) {
-                let tr = checkElement('tr_'+i, 'tr','tbody')
-                let span_name = checkElement('name_'+i,"td","tr_" + i)
-                let span_rx = checkElement('rx_'+i,"td","tr_" + i)
-                let span_rx_name = checkElement('rx_name_'+i,"td","tr_" + i)
-                let span_tx = checkElement('tx_'+i,"td","tr_" + i)
-                let span_tx_name = checkElement('tx_name_'+i,"td","tr_" + i)
+                let tr = checkElement('tr_' + i, 'tr', 'tbody')
+                let span_name = checkElement('name_' + i, "td", "tr_" + i)
+                let span_rx = checkElement('rx_' + i, "td", "tr_" + i)
+                let span_rx_name = checkElement('rx_name_' + i, "td", "tr_" + i)
+                let span_tx = checkElement('tx_' + i, "td", "tr_" + i)
+                let span_tx_name = checkElement('tx_name_' + i, "td", "tr_" + i)
 
             }
             for (var i = 0; i < jsonObj.length; i++) {
@@ -106,7 +106,7 @@ function loadJSON(url){
     http_request.send();
 }
 
-function checkElement(id, elt, parent){
+function checkElement(id, elt, parent) {
     let tmp = document.getElementById(id)
     if (tmp == null) {
         var d = document.createElement(elt)
@@ -117,15 +117,17 @@ function checkElement(id, elt, parent){
     return tmp
 }
 
-function notif(title, body){
-    new Notification(title,{
+function notif(title, body) {
+    new Notification(title, {
         body: body,
         icon: '../assets/img/sokys.png'
     });
 }
 
 
-function Connection(){
+let reconnection = false
+
+function Connection() {
     let url = "http://" + localStorage.getItem("host") + ":" + localStorage.getItem("port")
 
     var xhr = new XMLHttpRequest();
@@ -134,18 +136,23 @@ function Connection(){
     xhr.send();
 
     xhr.addEventListener("readystatechange", processRequest, false);
+
+    // debugger
+
+
     function processRequest(e) {
         if (xhr.readyState == 4) {
             if (xhr.status >= 200 && xhr.status < 304) {
-                notif("Connection Ok !", "Super la connexion est réussi!!")
-                window.setInterval(function(){
-                    loadJSON(url)
-                },1000)
+                if (!reconnection) {
+                    notif("Connection Ok !", "Super la connexion est réussi!!")
+                }
+                reconnection = true
+                window.setTimeout(Connection, 1000)
+                loadJSON(url)
             } else {
-                localStorage.clear()
-                host.value = ""
-                port.value = ""
-                alert("Problème de connexion. L'adresse : " + url + " ne fournit pas de connection");
+                notif("Problème de connexion. L'adresse : " + url + " ne fournit pas de connection\nTest de connexion dans 30s");
+                reconnection = false
+                window.setTimeout(Connection, 30000)
             }
         }
     }

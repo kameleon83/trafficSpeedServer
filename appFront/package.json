@@ -1,29 +1,29 @@
 {
-  "name": "trafficSpeed",
-  "productName": "Traffic_Speed",
-  "description": "Application du traffic de débit sur une machine distante",
-  "version": "0.1.3",
-  "author": "Samuel Michaux - Sokys",
-  "main": "main.js",
-  "dependencies": {
-    "asar": "^0.13.0",
-    "auto-launch": "^5.0.1",
-    "electron": "^1.4.15",
-    "electron-builder": "^14.1.1",
-    "electron-packager": "^8.5.2",
-    "electron-screen": "^1.0.3",
-    "electron-squirrel-startup": "^1.0.0",
-    "electron-winstaller": "^2.5.2",
-    "ipc": "0.0.1"
-  },
-  "scripts": {
-    "start": "electron . --enable-logging --remote-debugging-port=9222 --enable-transparent-visuals --disable-gpu",
-    "dev": "TODO_DEV=true npm run start",
-    "dev:win": "SET TODO_DEV=true && npm run start",
-    "package-mac": "electron-packager . --overwrite --asar=true --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=x64 --icon=assets/img/sokys.ico --prune=true --out=release-builds --app-version=0.1.3 --version-string.CompanyName=SOKYS --version-string.LegalCopyright=\"Copyright (C) 2016 Sokys Ltd\" --version-string.FileDescription=SOKYS --version-string.ProductName=\"TrafficSpeed\" --version-string.ProductVersion=0.1.3",
-    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/img/sokys.png --prune=true --out=release-builds",
-    "create-installer-mac": "electron-installer-dmg ./release-builds/Electron\\ tutorial\\ app-darwin-x64/Electron\\ tutorial\\ app.app electron-tutorial-app --out=release-builds --overwrite --icon=assets/icons/mac/icon.icns",
-    "create-installer-win": "node installers/windows/createinstaller.js"
-  }
+    "name": "trafficSpeed",
+    "productName": "Traffic_Speed",
+    "description": "Application du traffic de débit sur une machine distante",
+    "version": "0.1.3",
+    "author": "Samuel Michaux - Sokys",
+    "main": "main.js",
+    "dependencies": {
+        "asar": "^0.13.0",
+        "auto-launch": "^5.0.1",
+        "electron": "^1.4.15",
+        "electron-builder": "^14.1.1",
+        "electron-packager": "^8.5.2",
+        "electron-screen": "^1.0.3",
+        "electron-squirrel-startup": "^1.0.0",
+        "electron-winstaller": "^2.5.2",
+        "ipc": "0.0.1"
+    },
+    "scripts": {
+        "start": "electron . --enable-logging --remote-debugging-port=9222 --enable-transparent-visuals --disable-gpu",
+        "dev": "TODO_DEV=true npm run start",
+        "dev:win": "SET TODO_DEV=true && npm run start",
+        "package-mac": "electron-packager . --overwrite --asar=true --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+        "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=x64 --icon=assets/img/sokys.ico --prune=true --out=release-builds --app-version=0.1.3 --version-string.CompanyName=SOKYS --version-string.LegalCopyright=\"Copyright (C) 2016 Sokys Ltd\" --version-string.FileDescription=SOKYS --version-string.ProductName=\"TrafficSpeed\" --version-string.ProductVersion=0.1.3",
+        "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/img/sokys.png --prune=true --out=release-builds",
+        "create-installer-mac": "electron-installer-dmg ./release-builds/Electron\\ tutorial\\ app-darwin-x64/Electron\\ tutorial\\ app.app electron-tutorial-app --out=release-builds --overwrite --icon=assets/icons/mac/icon.icns",
+        "create-installer-win": "node installers/windows/createinstaller.js"
+    }
 }
